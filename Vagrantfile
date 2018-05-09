@@ -24,6 +24,8 @@ Vagrant.configure("2") do |config|
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
   # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 3306, host: 3306
+  config.vm.network "forwarded_port", guest: 5000, host: 5000
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
@@ -32,7 +34,7 @@ Vagrant.configure("2") do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "private_network", ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -70,6 +72,9 @@ Vagrant.configure("2") do |config|
     /usr/bin/curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
     apt-get update
     apt-get install -y puppet
+    debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
+    debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+    apt-get -y install mysql-server
   SHELL
 
   config.vm.provision "puppet" do |puppet|

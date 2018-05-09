@@ -36,6 +36,7 @@ service { 'php7.0-fpm':
 	require => Package['php'],
 }
 
+
 file { 'vagrant-nginx':
 	path => '/etc/nginx/sites-available/vagrant',
 	ensure => file,
